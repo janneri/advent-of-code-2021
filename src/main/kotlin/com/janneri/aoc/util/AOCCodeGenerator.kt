@@ -1,28 +1,26 @@
 package com.janneri.aoc.util
 
-import java.io.File
-import java.net.CookieHandler
-import java.net.CookieManager
-import java.net.HttpCookie
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
+import com.janneri.aoc.util.AOCClient.downloadInput
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.Duration
 
 
-object AdventOfCodeTemplateUtil {
-    private const val YEAR = 2021
-
-    private fun createDay(dayNum: Int) {
+/**
+ * A helper to create
+ * 1) the source file
+ * 2) the test source file and
+ * 3) input file, which is downloaded from AOC site
+ *
+ * for a year-day given as a parameter
+ */
+object AOCCodeGenerator {
+    private fun createDay(year: Int, dayNum: Int) {
         val dir = Path.of("src", "main", "kotlin", "com", "janneri", "aoc")
         val dayPrefix = String.format("Day%02d", dayNum)
         val mainFile = dir.resolve("${dayPrefix}.kt").toFile()
 
         Files.writeString(mainFile.toPath(), """
-        // See puzzle in https://adventofcode.com/$YEAR/day/$dayNum
+        // See puzzle in https://adventofcode.com/$year/day/$dayNum
         package com.janneri.aoc
         
         class $dayPrefix(val inputLines: List<String>) {
@@ -74,39 +72,11 @@ object AdventOfCodeTemplateUtil {
         val testResourcesDir = Path.of("src", "test", "resources")
         testResourcesDir.resolve("${dayPrefix}_test.txt").toFile().createNewFile()
         val inputTxtFile = testResourcesDir.resolve("$dayPrefix.txt").toFile()
-        Files.writeString(inputTxtFile.toPath(), downloadInput(dayNum))
-    }
-
-    fun printlnIndented(str: String, level: Int) {
-        println("${"  ".repeat(level)} $str")
-    }
-
-    private fun getHttpClient(): HttpClient {
-        CookieHandler.setDefault(CookieManager())
-        val cookieManager = CookieHandler.getDefault() as CookieManager
-        val sessionCookieValue = File(System.getProperty("user.home"),".adventofcode.session").readText().trim()
-        val aocSessionCookie = HttpCookie("session", sessionCookieValue).apply {
-            path = "/"
-            version = 0
-        }
-        cookieManager.cookieStore.add(URI("https://adventofcode.com"), aocSessionCookie)
-        return HttpClient.newBuilder()
-            .cookieHandler(cookieManager)
-            .connectTimeout(Duration.ofSeconds(10))
-            .build()
-    }
-
-    private fun downloadInput(dayNum: Int): String {
-        val client = getHttpClient()
-        val req = HttpRequest.newBuilder()
-            .uri(URI.create("https://adventofcode.com/$YEAR/day/$dayNum/input"))
-            .GET().build()
-
-        return client.send(req, HttpResponse.BodyHandlers.ofString()).body().trim()
+        Files.writeString(inputTxtFile.toPath(), downloadInput(year, dayNum))
     }
 
     @JvmStatic
     fun main(args: Array<String>) {
-        createDay(4)
+        createDay(2021, 5)
     }
 }
