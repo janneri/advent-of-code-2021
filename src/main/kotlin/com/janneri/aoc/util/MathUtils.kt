@@ -3,6 +3,7 @@ package com.janneri.aoc.util
 import kotlin.math.abs
 
 fun sumN(n: Long): Long = n * (n + 1) / 2
+fun Int.sumN() = sumN(this.toLong()).toInt()
 
 fun findLCMOfListOfNumbers(numbers: List<Long>): Long {
     var result = numbers[0]

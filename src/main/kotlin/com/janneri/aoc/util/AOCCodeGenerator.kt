@@ -77,6 +77,6 @@ object AOCCodeGenerator {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        createDay(2021, 6)
+        createDay(2021, 7)
     }
 }
