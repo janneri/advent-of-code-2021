@@ -14,10 +14,9 @@ class Day07(inputLines: List<String>) {
         }
 
     private fun solve(costFunction: (Int, Int) -> Int) = (0..positions.last())
-        .map { pos -> pos to totalFuel(costFunction, pos) }
-        .minBy { it.second }
-        .second
+        .map { totalFuel(costFunction, it) }
+        .min()
 
-    fun part1(): Int = solve { fromCol: Int, targetCol: Int,  -> abs(targetCol - fromCol) }
+    fun part1(): Int = solve { fromCol: Int, targetCol: Int -> abs(targetCol - fromCol) }
     fun part2(): Int = solve { fromCol: Int, targetCol: Int -> abs(targetCol - fromCol).sumN() }
 }
