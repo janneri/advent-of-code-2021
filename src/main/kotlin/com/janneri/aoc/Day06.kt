@@ -9,8 +9,8 @@ class Day06(inputLines: List<String>) {
         .eachCount()
         .mapValues { it.value.toLong() }
 
-    private fun getNewFish(fish: Map<Int, Long>): Map<Int, Long> {
-        return mapOf(
+    private fun getNewFish(fish: Map<Int, Long>): Map<Int, Long> =
+        mapOf(
             0 to (fish[1] ?: 0),
             1 to (fish[2] ?: 0),
             2 to (fish[3] ?: 0),
@@ -21,7 +21,6 @@ class Day06(inputLines: List<String>) {
             7 to (fish[8] ?: 0),
             8 to (fish[0] ?: 0),
         )
-    }
 
     private fun simulate(fish: Map<Int, Long>, days: Int): Long {
         var newFish = fish
